@@ -1,21 +1,34 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { dealerApi } from '../api/axiosConfigCalcApp';
 import { TableSort } from '../components/TableWithSearch/Table';
 import { log } from 'console';
+import TableDealer from '../components/_organisms/TableDealer/TableDealer';
 
 const dealersMock = [
   { name: 'bogdan', company: 'cranky-crag', email: 'bsenelg@gmail.com' },
   { name: 'yuri', company: 'cranky-crag', email: 'bsenelg@gmail.com' },
 ];
 const Dealers = () => {
-  const dealers = dealerApi.get('/DealerControllerGetAll');
+  const [dealers, setDealers] = useState([]);
+  const getDealers = dealerApi.get('/DealerControllerGetAll');
 
   useEffect(() => {
-    dealers.then((response) => {
-      console.log(response);
+    getDealers.then((response) => {
+      console.log(response.data);
+      setDealers(response.data);
     });
   }, []);
-  return <TableSort data={dealersMock} />;
+
+  return (
+    <div>
+      <TableSort data={dealersMock} />
+      <br />
+      <br />
+      <br />
+      <div>test</div>
+      <TableDealer headingDebt="debt" headingName="name" headingPhone="phone" rows={dealers} />
+    </div>
+  );
 };
 
 export default Dealers;
