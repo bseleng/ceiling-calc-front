@@ -1,17 +1,53 @@
-import { Table, ThemeIcon } from '@mantine/core';
-import { ITableDealer } from '../../../interfaces';
+import { Table } from '@mantine/core';
 import TableRow from '../../_molecules/TableRow/TableRow';
+import TableHeading from '../../_atoms/TableHeading/TableHeading';
+import { ATableDealerRows, ATableDealerSortDirections } from '../../../store/AtomsTableDealer';
+import { useAtom } from 'jotai';
+import { setTableDealerSort, sortNumericValues, sortTextValues } from './Logic';
+import { ITableDealerHeadingSortable } from '../../../interfaces';
 
-interface IProps extends ITableDealer {}
+const TableDealer = () => {
+  const [loadedRows, setLoadedRows] = useAtom(ATableDealerRows);
+  const [sortDirection, setSortDirection] = useAtom(ATableDealerSortDirections);
 
-const TableDealer = ({ rows, headingDebt, headingName, headingPhone }: IProps) => {
+  const sortColumn = (column: ITableDealerHeadingSortable, columnType: 'text' | 'numeric') => {
+    setSortDirection(setTableDealerSort(sortDirection, column));
+
+    switch (columnType) {
+      case 'text':
+        setLoadedRows(sortTextValues(loadedRows, column, sortDirection[column]));
+        return;
+      case 'numeric':
+        setLoadedRows(sortNumericValues(loadedRows, column, sortDirection[column]));
+        return;
+      default:
+        return;
+    }
+  };
+
   return (
     <Table horizontalSpacing="md" verticalSpacing="xs" miw={700} sx={{ tableLayout: 'fixed' }}>
       <thead>
-        <tr></tr>
+        <tr>
+          <TableHeading
+            onSort={() => sortColumn('lastName', 'text')}
+            iconType={'sortText'}
+            sortDirection={sortDirection.lastName}
+          >
+            Фамилия Имя
+          </TableHeading>
+          <TableHeading>Телефон</TableHeading>
+          <TableHeading
+            iconType={'sortNumber'}
+            onSort={() => sortColumn('debts', 'numeric')}
+            sortDirection={sortDirection.debts}
+          >
+            Задолженность
+          </TableHeading>
+        </tr>
       </thead>
       <tbody>
-        {rows.map((row) => (
+        {loadedRows.map((row) => (
           <TableRow
             debts={row.debts}
             firstName={row.firstName}
@@ -25,4 +61,4 @@ const TableDealer = ({ rows, headingDebt, headingName, headingPhone }: IProps) =
   );
 };
 
-export default TableDealer
+export default TableDealer;

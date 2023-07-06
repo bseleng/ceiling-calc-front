@@ -1,16 +1,17 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { dealerApi } from '../api/axiosConfigCalcApp';
 import { TableSort } from '../components/TableWithSearch/Table';
-import { log } from 'console';
 import TableDealer from '../components/_organisms/TableDealer/TableDealer';
+import { useAtom } from 'jotai';
+import { ATableDealerRows } from '../store/AtomsTableDealer';
 
 const dealersMock = [
   { name: 'bogdan', company: 'cranky-crag', email: 'bsenelg@gmail.com' },
   { name: 'yuri', company: 'cranky-crag', email: 'bsenelg@gmail.com' },
 ];
 const Dealers = () => {
-  const [dealers, setDealers] = useState([]);
-  const getDealers = dealerApi.get('/DealerControllerGetAll');
+  const [dealers, setDealers] = useAtom(ATableDealerRows);
+  const getDealers = dealerApi({});
 
   useEffect(() => {
     getDealers.then((response) => {
@@ -26,7 +27,7 @@ const Dealers = () => {
       <br />
       <br />
       <div>test</div>
-      <TableDealer headingDebt="debt" headingName="name" headingPhone="phone" rows={dealers} />
+      <TableDealer />
     </div>
   );
 };

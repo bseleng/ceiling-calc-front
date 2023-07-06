@@ -1,6 +1,6 @@
-import { ITableRowDealer } from '../../../interfaces';
+import { ITableDealerRow } from '../../../interfaces';
 
-interface IProps extends ITableRowDealer {}
+interface IProps extends ITableDealerRow {}
 
 const TableRow = ({ debts, firstName, lastName, telephone }: IProps) => {
   return (
