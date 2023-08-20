@@ -5,6 +5,7 @@ import { ATableDealerRows, ATableDealerSortDirections } from '../../../store/Ato
 import { useAtom } from 'jotai';
 import { setTableDealerSort, sortNumericValues, sortTextValues } from './Logic';
 import { ITableDealerHeadingSortable } from '../../../interfaces';
+import { Suspense, useEffect } from 'react';
 
 const TableDealer = () => {
   const [loadedRows, setLoadedRows] = useAtom(ATableDealerRows);
@@ -25,39 +26,42 @@ const TableDealer = () => {
     }
   };
 
+
   return (
-    <Table horizontalSpacing="md" verticalSpacing="xs" miw={700} sx={{ tableLayout: 'fixed' }}>
-      <thead>
-        <tr>
-          <TableHeading
-            onSort={() => sortColumn('lastName', 'text')}
-            iconType={'sortText'}
-            sortDirection={sortDirection.lastName}
-          >
-            Фамилия Имя
-          </TableHeading>
-          <TableHeading>Телефон</TableHeading>
-          <TableHeading
-            iconType={'sortNumber'}
-            onSort={() => sortColumn('debts', 'numeric')}
-            sortDirection={sortDirection.debts}
-          >
-            Задолженность
-          </TableHeading>
-        </tr>
-      </thead>
-      <tbody>
-        {loadedRows.map((row) => (
-          <TableRow
-            debts={row.debts}
-            firstName={row.firstName}
-            lastName={row.lastName}
-            telephone={row.telephone}
-            key={row.firstName + row.lastName + row.telephone}
-          />
-        ))}
-      </tbody>
-    </Table>
+    <Suspense fallback={<div>LOADING...</div>}>
+      <Table horizontalSpacing="md" verticalSpacing="xs" miw={700} sx={{ tableLayout: 'fixed' }}>
+        <thead>
+          <tr>
+            <TableHeading
+              onSort={() => sortColumn('lastName', 'text')}
+              iconType={'sortText'}
+              sortDirection={sortDirection?.lastName || undefined}
+            >
+              Фамилия Имя
+            </TableHeading>
+            <TableHeading>Телефон</TableHeading>
+            <TableHeading
+              iconType={'sortNumber'}
+              onSort={() => sortColumn('debts', 'numeric')}
+              sortDirection={sortDirection?.debts || undefined}
+            >
+              Задолженность
+            </TableHeading>
+          </tr>
+        </thead>
+        <tbody>
+          {loadedRows.map((row) => (
+            <TableRow
+              debts={row.debts}
+              firstName={row.firstName}
+              lastName={row.lastName}
+              telephone={row.telephone}
+              key={row.firstName + row.lastName + row.telephone}
+            />
+          ))}
+        </tbody>
+      </Table>
+    </Suspense>
   );
 };
 

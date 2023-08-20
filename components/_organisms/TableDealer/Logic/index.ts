@@ -109,7 +109,5 @@ export const setTableDealerSort = (
     }
   });
 
-  console.log(draftSort);
-
   return draftSort;
 };
