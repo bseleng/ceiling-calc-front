@@ -57,11 +57,22 @@ export default function HomePage() {
         </Grid.Col>
         <Grid.Col span={3}>
           <Group grow>
-            <Link className={classes.link} href={'/dealers'}>
-              <Button color="teal" variant={'filled'} className={classes.linkButton}>
-                Дилеры
-              </Button>
-            </Link>
+            <Flex direction="column" gap="md">
+              <Link className={classes.link} href={'/dealers'}>
+                <Button color="teal" variant={'filled'} className={classes.linkButton}>
+                  Дилеры
+                </Button>
+              </Link>
+              <a
+                className={classes.link}
+                href={'http://localhost:' + baseDevPort + '/swagger'}
+                target="_blank"
+              >
+                <Button color="teal" variant={'filled'} className={classes.linkButton}>
+                  Swagger
+                </Button>
+              </a>
+            </Flex>
           </Group>
         </Grid.Col>
       </Grid>

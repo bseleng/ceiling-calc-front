@@ -4,6 +4,7 @@ import { TableSort } from '../components/TableWithSearch/Table';
 import TableDealer from '../components/_organisms/TableDealer/TableDealer';
 import { useAtom } from 'jotai';
 import { ATableDealerRows } from '../store/AtomsTableDealer';
+import { Container } from '@mantine/core';
 
 const dealersMock = [
   { name: 'bogdan', company: 'cranky-crag', email: 'bsenelg@gmail.com' },
@@ -21,14 +22,14 @@ const Dealers = () => {
   }, []);
 
   return (
-    <div>
+    <Container size={'xl'}>
       <TableSort data={dealersMock} />
       <br />
       <br />
       <br />
       <div>test</div>
       <TableDealer />
-    </div>
+    </Container>
   );
 };
 
