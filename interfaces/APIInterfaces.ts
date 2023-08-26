@@ -1,1 +1,1 @@
-export type IBaseDevURL = '5249' | '7021';
+export type IBaseDevURL = undefined | '5249' | '7021';

@@ -21,7 +21,6 @@ const Dealers = () => {
   };
   const dealersParamsQuery = new URLSearchParams(dealersParams);
   //TODO: refactor curry???
-  //TODO: move port to localstorage
   const getDealers = dealerApiInstance(currentDevPort)(
     dealerApiEndpoints.pagination + '?' + dealersParamsQuery
   );

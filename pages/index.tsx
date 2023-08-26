@@ -36,6 +36,7 @@ export default function HomePage() {
     return 'выбрать';
   };
 
+  //TODO: add const NoSSR = dynamic(() => import('../components/no-ssr'), { ssr: false }) for buttons
   return (
     <Container>
       <Welcome />
