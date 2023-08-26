@@ -63,15 +63,15 @@ export default function HomePage() {
                   Дилеры
                 </Button>
               </Link>
-              <a
-                className={classes.link}
-                href={'http://localhost:' + baseDevPort + '/swagger'}
+              <Button
+                component="a"
                 target="_blank"
+                href={'http://localhost:' + baseDevPort + '/swagger'}
+                color="teal"
+                variant={'filled'}
               >
-                <Button color="teal" variant={'filled'} className={classes.linkButton}>
-                  Swagger
-                </Button>
-              </a>
+                Swagger
+              </Button>
             </Flex>
           </Group>
         </Grid.Col>
