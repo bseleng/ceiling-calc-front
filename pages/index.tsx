@@ -11,6 +11,9 @@ const useStyles = createStyles((theme) => ({
     color: 'white',
     textDecoration: 'none',
   },
+  linkButton: {
+    width: '100%',
+  },
 }));
 
 export default function HomePage() {
@@ -52,13 +55,13 @@ export default function HomePage() {
             </Flex>
           </Group>
         </Grid.Col>
-        <Grid.Col span={4}>
+        <Grid.Col span={3}>
           <Group grow>
-            <Button color="teal" variant={'filled'}>
-              <Link className={classes.link} href={'/dealers'}>
+            <Link className={classes.link} href={'/dealers'}>
+              <Button color="teal" variant={'filled'} className={classes.linkButton}>
                 Дилеры
-              </Link>
-            </Button>
+              </Button>
+            </Link>
           </Group>
         </Grid.Col>
       </Grid>
