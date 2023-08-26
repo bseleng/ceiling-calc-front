@@ -2,22 +2,29 @@ import { useEffect } from 'react';
 import { dealerApiEndpoints, dealerApiInstance } from '../api/axiosConfigCalcApp';
 import { TableSort } from '../components/TableWithSearch/Table';
 import TableDealer from '../components/_organisms/TableDealer/TableDealer';
-import { useAtom } from 'jotai';
+import { useAtom, useAtomValue } from 'jotai';
 import { ATableDealerRows } from '../store/AtomsTableDealer';
 import { Container } from '@mantine/core';
+import { ABaseDevURL } from '../store/AtomsAPI';
 
 const dealersMock = [
   { name: 'bogdan', company: 'cranky-crag', email: 'bsenelg@gmail.com' },
   { name: 'yuri', company: 'cranky-crag', email: 'bsenelg@gmail.com' },
 ];
 const Dealers = () => {
+  const currentDevPort = useAtomValue(ABaseDevURL);
+
   const [dealers, setDealers] = useAtom(ATableDealerRows);
   const dealersParams = {
     PageNumber: '1',
     PageSize: '3',
   };
   const dealersParamsQuery = new URLSearchParams(dealersParams);
-  const getDealers = dealerApiInstance(dealerApiEndpoints.pagination + '?' + dealersParamsQuery);
+  //TODO: refactor curry???
+  //TODO: move port to localstorage
+  const getDealers = dealerApiInstance(currentDevPort)(
+    dealerApiEndpoints.pagination + '?' + dealersParamsQuery
+  );
 
   useEffect(() => {
     getDealers.then((response) => {

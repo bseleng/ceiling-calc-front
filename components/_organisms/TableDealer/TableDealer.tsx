@@ -5,7 +5,7 @@ import { ATableDealerRows, ATableDealerSortDirections } from '../../../store/Ato
 import { useAtom } from 'jotai';
 import { setTableDealerSort, sortNumericValues, sortTextValues } from './Logic';
 import { ITableDealerHeadingSortable } from '../../../interfaces';
-import { Suspense, useEffect } from 'react';
+import { Suspense } from 'react';
 
 const TableDealer = () => {
   const [loadedRows, setLoadedRows] = useAtom(ATableDealerRows);
@@ -25,7 +25,6 @@ const TableDealer = () => {
         return;
     }
   };
-
 
   return (
     <Suspense fallback={<div>LOADING...</div>}>

@@ -1,9 +1,12 @@
 import axios from 'axios';
+import { IBaseDevURL } from '../interfaces';
 
-export const dealerApiInstance = axios.create({
-  baseURL: 'http://localhost:5249/api/DealerController/',
-  method: 'GET',
-});
+export const dealerApiInstance = (currentDevPort: IBaseDevURL) => {
+  const baseURL = `http://localhost:${currentDevPort}/api/DealerController/`;
+  return axios.create({
+    baseURL,
+  });
+};
 
 const dealerDraftEndpoints = {
   pagination: 'Pagination',
