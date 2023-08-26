@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { dealerApi } from '../api/axiosConfigCalcApp';
+import { dealerApiEndpoints, dealerApiInstance } from '../api/axiosConfigCalcApp';
 import { TableSort } from '../components/TableWithSearch/Table';
 import TableDealer from '../components/_organisms/TableDealer/TableDealer';
 import { useAtom } from 'jotai';
@@ -12,12 +12,16 @@ const dealersMock = [
 ];
 const Dealers = () => {
   const [dealers, setDealers] = useAtom(ATableDealerRows);
-  const getDealers = dealerApi({});
+  const dealersParams = {
+    PageNumber: '1',
+    PageSize: '3',
+  };
+  const dealersParamsQuery = new URLSearchParams(dealersParams);
+  const getDealers = dealerApiInstance(dealerApiEndpoints.pagination + '?' + dealersParamsQuery);
 
   useEffect(() => {
     getDealers.then((response) => {
-      console.log(response.data);
-      setDealers(response.data);
+      setDealers(response.data.data);
     });
   }, []);
 
@@ -27,7 +31,6 @@ const Dealers = () => {
       <br />
       <br />
       <br />
-      <div>test</div>
       <TableDealer />
     </Container>
   );
