@@ -60,8 +60,8 @@ const TableDealer = ({ rowCount, isLoading }: IProps) => {
         <tbody>
           {isLoading ? (
             <>
-              {skeletonRows.map((skeletonRow) => (
-                <tr>
+              {skeletonRows.map((skeletonRow, i) => (
+                <tr key={'skeleton-' + i}>
                   <td>
                     <Skeleton height={skeletonHeight} mb={skeletonMb} mt={skeletonMt} width={350} />
                   </td>
