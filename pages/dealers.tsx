@@ -1,10 +1,10 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { dealerApiEndpoints, dealerApiInstance } from '../api/axiosConfigCalcApp';
 import { TableSort } from '../components/TableWithSearch/Table';
 import TableDealer from '../components/_organisms/TableDealer/TableDealer';
 import { useAtom, useAtomValue } from 'jotai';
 import { ATableDealerRows } from '../store/AtomsTableDealer';
-import { Container } from '@mantine/core';
+import { Container, Pagination, Space } from '@mantine/core';
 import { ABaseDevURL } from '../store/AtomsAPI';
 
 const dealersMock = [
@@ -15,9 +15,12 @@ const Dealers = () => {
   const currentDevPort = useAtomValue(ABaseDevURL);
 
   const [dealers, setDealers] = useAtom(ATableDealerRows);
+  const [activePage, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(10);
+  const [pageSize, setPageSize] = useState(3);
   const dealersParams = {
-    PageNumber: '1',
-    PageSize: '3',
+    PageNumber: activePage.toString(),
+    PageSize: pageSize.toString(),
   };
   const dealersParamsQuery = new URLSearchParams(dealersParams);
 
@@ -30,9 +33,10 @@ const Dealers = () => {
 
       getDealers.then((response) => {
         setDealers(response.data.data);
+        setTotalPages(response.data.totalPages);
       });
     }
-  }, [currentDevPort]);
+  }, [currentDevPort, activePage]);
 
   return (
     <Container size={'xl'}>
@@ -40,7 +44,9 @@ const Dealers = () => {
       <br />
       <br />
       <br />
-      <TableDealer />
+      <TableDealer rowCount={pageSize} />
+      <Space h="xl" />
+      <Pagination value={activePage} onChange={setPage} total={totalPages} />
     </Container>
   );
 };

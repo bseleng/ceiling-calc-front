@@ -1,4 +1,4 @@
-import { Table } from '@mantine/core';
+import { Skeleton, Table } from '@mantine/core';
 import TableRow from '../../_molecules/TableRow/TableRow';
 import TableHeading from '../../_atoms/TableHeading/TableHeading';
 import { ATableDealerRows, ATableDealerSortDirections } from '../../../store/AtomsTableDealer';
@@ -7,9 +7,17 @@ import { setTableDealerSort, sortNumericValues, sortTextValues } from './Logic';
 import { ITableDealerHeadingSortable } from '../../../interfaces';
 import { Suspense } from 'react';
 
-const TableDealer = () => {
+type IProps = {
+  rowCount: number;
+};
+
+const TableDealer = ({ rowCount }: IProps) => {
   const [loadedRows, setLoadedRows] = useAtom(ATableDealerRows);
   const [sortDirection, setSortDirection] = useAtom(ATableDealerSortDirections);
+  const skeletonRows = Array.from(Array(rowCount));
+  const skeletonHeight = 16;
+  const skeletonMb = 3;
+  const skeletonMt = 3;
 
   const sortColumn = (column: ITableDealerHeadingSortable, columnType: 'text' | 'numeric') => {
     setSortDirection(setTableDealerSort(sortDirection, column));
@@ -49,15 +57,35 @@ const TableDealer = () => {
           </tr>
         </thead>
         <tbody>
-          {loadedRows.map((row) => (
-            <TableRow
-              debts={row.debts}
-              firstName={row.firstName}
-              lastName={row.lastName}
-              telephone={row.telephone}
-              key={row.firstName + row.lastName + row.telephone}
-            />
-          ))}
+          {loadedRows.length === 0 ? (
+            <>
+              {skeletonRows.map((skeletonRow) => (
+                <tr>
+                  <td>
+                    <Skeleton height={skeletonHeight} mb={skeletonMb} mt={skeletonMt} />
+                  </td>
+                  <td>
+                    <Skeleton height={skeletonHeight} mb={skeletonMb} mt={skeletonMt} />
+                  </td>
+                  <td>
+                    <Skeleton height={skeletonHeight} mb={skeletonMb} mt={skeletonMt} />
+                  </td>
+                </tr>
+              ))}
+            </>
+          ) : (
+            <>
+              {loadedRows.map((row) => (
+                <TableRow
+                  debts={row.debts}
+                  firstName={row.firstName}
+                  lastName={row.lastName}
+                  telephone={row.telephone}
+                  key={row.firstName + row.lastName + row.telephone}
+                />
+              ))}
+            </>
+          )}
         </tbody>
       </Table>
     </Suspense>
