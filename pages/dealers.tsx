@@ -20,16 +20,19 @@ const Dealers = () => {
     PageSize: '3',
   };
   const dealersParamsQuery = new URLSearchParams(dealersParams);
-  //TODO: refactor curry???
-  const getDealers = dealerApiInstance(currentDevPort)(
-    dealerApiEndpoints.pagination + '?' + dealersParamsQuery
-  );
 
+  //TODO: refactor curry???
   useEffect(() => {
-    getDealers.then((response) => {
-      setDealers(response.data.data);
-    });
-  }, []);
+    if (currentDevPort !== undefined) {
+      const getDealers = dealerApiInstance(currentDevPort)(
+        dealerApiEndpoints.pagination + '?' + dealersParamsQuery
+      );
+
+      getDealers.then((response) => {
+        setDealers(response.data.data);
+      });
+    }
+  }, [currentDevPort]);
 
   return (
     <Container size={'xl'}>
