@@ -4,8 +4,10 @@ import { TableSort } from '../components/TableWithSearch/Table';
 import TableDealer from '../components/_organisms/TableDealer/TableDealer';
 import { useAtom, useAtomValue } from 'jotai';
 import { ATableDealerRows } from '../store/AtomsTableDealer';
-import { Container, Flex, Pagination, Select, Space } from '@mantine/core';
+import { Container, Flex, Pagination, Select, Space, ThemeIcon } from '@mantine/core';
 import { ABaseDevURL } from '../store/AtomsAPI';
+import { IconHome } from '@tabler/icons-react';
+import Link from 'next/link';
 
 const dealersMock = [
   { name: 'bogdan', company: 'cranky-crag', email: 'bsenelg@gmail.com' },
@@ -52,6 +54,13 @@ const Dealers = () => {
       <br />
       <br />
       <br />
+      <Flex>
+        <Link href={'/'}>
+          <ThemeIcon radius="md" size="xl">
+            <IconHome size={26} strokeWidth={2} />
+          </ThemeIcon>
+        </Link>
+      </Flex>
       <Flex justify={'flex-end'}>
         <Select
           label="Записей на странице"
