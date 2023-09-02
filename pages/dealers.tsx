@@ -4,7 +4,7 @@ import { TableSort } from '../components/TableWithSearch/Table';
 import TableDealer from '../components/_organisms/TableDealer/TableDealer';
 import { useAtom, useAtomValue } from 'jotai';
 import { ATableDealerRows } from '../store/AtomsTableDealer';
-import { Container, Pagination, Space } from '@mantine/core';
+import { Container, Flex, Pagination, Select, Space } from '@mantine/core';
 import { ABaseDevURL } from '../store/AtomsAPI';
 
 const dealersMock = [
@@ -18,12 +18,12 @@ const Dealers = () => {
 
   const [activePage, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(10);
-  const [pageSize, setPageSize] = useState(3);
+  const [pageSize, setPageSize] = useState<string | null>('3');
   const [isLoading, setIsLoading] = useState(false);
 
   const dealersParams = {
     PageNumber: activePage.toString(),
-    PageSize: pageSize.toString(),
+    PageSize: (pageSize as string) || '3',
   };
   const dealersParamsQuery = new URLSearchParams(dealersParams);
 
@@ -44,7 +44,7 @@ const Dealers = () => {
           setIsLoading(false);
         });
     }
-  }, [currentDevPort, activePage]);
+  }, [currentDevPort, activePage, pageSize]);
 
   return (
     <Container size={'xl'}>
@@ -52,7 +52,22 @@ const Dealers = () => {
       <br />
       <br />
       <br />
-      <TableDealer rowCount={pageSize} isLoading={isLoading} />
+      <Flex justify={'flex-end'}>
+        <Select
+          label="Записей на странице"
+          placeholder="Записей на странице"
+          value={pageSize}
+          onChange={setPageSize}
+          data={[
+            { value: '3', label: '3' },
+            { value: '5', label: '5' },
+            { value: '7', label: '7' },
+            { value: '10', label: '10' },
+          ]}
+        />
+      </Flex>
+      <Space h="xl" />
+      <TableDealer rowCount={Number(pageSize as string) || 3} isLoading={isLoading} />
       <Space h="xl" />
       <Pagination value={activePage} onChange={setPage} total={totalPages} />
     </Container>
