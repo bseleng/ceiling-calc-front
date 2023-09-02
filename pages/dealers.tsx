@@ -15,9 +15,12 @@ const Dealers = () => {
   const currentDevPort = useAtomValue(ABaseDevURL);
 
   const [dealers, setDealers] = useAtom(ATableDealerRows);
+
   const [activePage, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(10);
   const [pageSize, setPageSize] = useState(3);
+  const [isLoading, setIsLoading] = useState(false);
+
   const dealersParams = {
     PageNumber: activePage.toString(),
     PageSize: pageSize.toString(),
@@ -27,14 +30,19 @@ const Dealers = () => {
   //TODO: refactor curry???
   useEffect(() => {
     if (currentDevPort !== undefined) {
+      setIsLoading(true);
       const getDealers = dealerApiInstance(currentDevPort)(
         dealerApiEndpoints.pagination + '?' + dealersParamsQuery
       );
 
-      getDealers.then((response) => {
-        setDealers(response.data.data);
-        setTotalPages(response.data.totalPages);
-      });
+      getDealers
+        .then((response) => {
+          setDealers(response.data.data);
+          setTotalPages(response.data.totalPages);
+        })
+        .finally(() => {
+          setIsLoading(false);
+        });
     }
   }, [currentDevPort, activePage]);
 
@@ -44,7 +52,7 @@ const Dealers = () => {
       <br />
       <br />
       <br />
-      <TableDealer rowCount={pageSize} />
+      <TableDealer rowCount={pageSize} isLoading={isLoading} />
       <Space h="xl" />
       <Pagination value={activePage} onChange={setPage} total={totalPages} />
     </Container>

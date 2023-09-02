@@ -9,9 +9,10 @@ import { Suspense } from 'react';
 
 type IProps = {
   rowCount: number;
+  isLoading: boolean;
 };
 
-const TableDealer = ({ rowCount }: IProps) => {
+const TableDealer = ({ rowCount, isLoading }: IProps) => {
   const [loadedRows, setLoadedRows] = useAtom(ATableDealerRows);
   const [sortDirection, setSortDirection] = useAtom(ATableDealerSortDirections);
   const skeletonRows = Array.from(Array(rowCount));
@@ -57,18 +58,18 @@ const TableDealer = ({ rowCount }: IProps) => {
           </tr>
         </thead>
         <tbody>
-          {loadedRows.length === 0 ? (
+          {isLoading ? (
             <>
               {skeletonRows.map((skeletonRow) => (
                 <tr>
                   <td>
-                    <Skeleton height={skeletonHeight} mb={skeletonMb} mt={skeletonMt} />
+                    <Skeleton height={skeletonHeight} mb={skeletonMb} mt={skeletonMt} width={350} />
                   </td>
                   <td>
-                    <Skeleton height={skeletonHeight} mb={skeletonMb} mt={skeletonMt} />
+                    <Skeleton height={skeletonHeight} mb={skeletonMb} mt={skeletonMt} width={200} />
                   </td>
                   <td>
-                    <Skeleton height={skeletonHeight} mb={skeletonMb} mt={skeletonMt} />
+                    <Skeleton height={skeletonHeight} mb={skeletonMb} mt={skeletonMt} width={150} />
                   </td>
                 </tr>
               ))}
