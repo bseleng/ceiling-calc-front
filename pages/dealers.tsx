@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { dealerApiEndpoints, dealerApiInstance } from '../api/axiosConfigCalcApp';
+import { dealerApiInstance } from '../api/axiosConfigCalcApp';
 import { TableSort } from '../components/TableWithSearch/Table';
 import TableDealer from '../components/_organisms/TableDealer/TableDealer';
 import { useAtom, useAtomValue } from 'jotai';
@@ -33,9 +33,7 @@ const Dealers = () => {
   useEffect(() => {
     if (currentDevPort !== undefined) {
       setIsLoading(true);
-      const getDealers = dealerApiInstance(currentDevPort)(
-        dealerApiEndpoints.pagination + '?' + dealersParamsQuery
-      );
+      const getDealers = dealerApiInstance(currentDevPort)('?' + dealersParamsQuery);
 
       getDealers
         .then((response) => {
