@@ -18,24 +18,20 @@ const Dealers = () => {
 
   const [dealers, setDealers] = useAtom(ATableDealerRows);
 
-  const [activePage, setPage] = useState(1);
+  const [activePage, setActivePage] = useState(1);
   const [totalPages, setTotalPages] = useState(10);
   const [pageSize, setPageSize] = useState<string | null>('3');
   const [isLoading, setIsLoading] = useState(false);
 
   const getDealersParams = {
     PageNumber: activePage.toString(),
-    PageSize: (pageSize as string) || '3',
+    PageSize: (pageSize as string) || '1',
   };
   const getDealersParamsQuery = new URLSearchParams(getDealersParams);
 
-  const deleteDealerParams = (id: number) => ({
-    id,
-  });
-
   //TODO: refactor curry???
   useEffect(() => {
-    if (currentDevPort !== undefined) {
+    if (currentDevPort !== undefined || dealers.length === 0) {
       setIsLoading(true);
       const getDealers = dealerApiInstance(currentDevPort)('?' + getDealersParamsQuery);
 
@@ -48,7 +44,13 @@ const Dealers = () => {
           setIsLoading(false);
         });
     }
-  }, [currentDevPort, activePage, pageSize]);
+  }, [currentDevPort, activePage, pageSize, dealers.length]);
+
+  useEffect(() => {
+    if (activePage > totalPages) {
+      setActivePage(totalPages);
+    }
+  }, [totalPages]);
 
   const deleteDealer = async (dealerId: number) => {
     const deleteDealerParams = {
@@ -56,7 +58,10 @@ const Dealers = () => {
     };
     const deleteDealersParamsQuery = new URLSearchParams(deleteDealerParams);
 
-    return await dealerApiInstance(currentDevPort).delete('?' + deleteDealersParamsQuery);
+    await dealerApiInstance(currentDevPort).delete('?' + deleteDealersParamsQuery);
+
+    const updatedDealers = dealers.filter((dealer) => dealer.id !== dealerId);
+    setDealers([...updatedDealers]);
   };
 
   return (
@@ -79,6 +84,7 @@ const Dealers = () => {
           value={pageSize}
           onChange={setPageSize}
           data={[
+            { value: '1', label: '1' },
             { value: '3', label: '3' },
             { value: '5', label: '5' },
             { value: '7', label: '7' },
@@ -93,7 +99,7 @@ const Dealers = () => {
         deleteDealer={deleteDealer}
       />
       <Space h="xl" />
-      <Pagination value={activePage} onChange={setPage} total={totalPages} />
+      <Pagination value={activePage} onChange={setActivePage} total={totalPages} />
     </Container>
   );
 };
