@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { dealerApiInstance } from '../api/axiosConfigCalcApp';
 import { TableSort } from '../components/TableWithSearch/Table';
 import TableDealer from '../components/_organisms/TableDealer/TableDealer';
 import { useAtom, useAtomValue } from 'jotai';
@@ -8,6 +7,7 @@ import { Container, Flex, Pagination, Select, Space, ThemeIcon } from '@mantine/
 import { ABaseDevPort } from '../store/AtomsAPI';
 import { IconHome } from '@tabler/icons-react';
 import Link from 'next/link';
+import { dealerApiInstance } from '../api/axiosConfigCalcApp';
 
 const dealersMock = [
   { name: 'bogdan', company: 'cranky-crag', email: 'bsenelg@gmail.com' },
@@ -23,17 +23,21 @@ const Dealers = () => {
   const [pageSize, setPageSize] = useState<string | null>('3');
   const [isLoading, setIsLoading] = useState(false);
 
-  const dealersParams = {
+  const getDealersParams = {
     PageNumber: activePage.toString(),
     PageSize: (pageSize as string) || '3',
   };
-  const dealersParamsQuery = new URLSearchParams(dealersParams);
+  const getDealersParamsQuery = new URLSearchParams(getDealersParams);
+
+  const deleteDealerParams = (id: number) => ({
+    id,
+  });
 
   //TODO: refactor curry???
   useEffect(() => {
     if (currentDevPort !== undefined) {
       setIsLoading(true);
-      const getDealers = dealerApiInstance(currentDevPort)('?' + dealersParamsQuery);
+      const getDealers = dealerApiInstance(currentDevPort)('?' + getDealersParamsQuery);
 
       getDealers
         .then((response) => {
@@ -45,6 +49,15 @@ const Dealers = () => {
         });
     }
   }, [currentDevPort, activePage, pageSize]);
+
+  const deleteDealer = async (dealerId: number) => {
+    const deleteDealerParams = {
+      id: dealerId.toString(),
+    };
+    const deleteDealersParamsQuery = new URLSearchParams(deleteDealerParams);
+
+    return await dealerApiInstance(currentDevPort).delete('?' + deleteDealersParamsQuery);
+  };
 
   return (
     <Container size={'xl'}>
@@ -74,7 +87,11 @@ const Dealers = () => {
         />
       </Flex>
       <Space h="xl" />
-      <TableDealer rowCount={Number(pageSize as string) || 3} isLoading={isLoading} />
+      <TableDealer
+        rowCount={Number(pageSize as string) || 3}
+        isLoading={isLoading}
+        deleteDealer={deleteDealer}
+      />
       <Space h="xl" />
       <Pagination value={activePage} onChange={setPage} total={totalPages} />
     </Container>

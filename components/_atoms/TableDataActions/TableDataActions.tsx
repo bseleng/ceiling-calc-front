@@ -4,9 +4,10 @@ import { useEffect, useRef, useState } from 'react';
 
 type IProps = {
   id: number;
+  deleteDealer(dealerId: number): void;
 };
 
-const TableDataActions = ({ id }: IProps) => {
+const TableDataActions = ({ id, deleteDealer }: IProps) => {
   const countDownInitialValue = 5;
   const deleteTextInitialValue = 'Отменить удаление';
 
@@ -42,6 +43,12 @@ const TableDataActions = ({ id }: IProps) => {
     }
   }, [countDownValue]);
 
+  useEffect(() => {
+    if (isDeleting) {
+      deleteDealer(id);
+    }
+  }, [isDeleting]);
+
   return (
     <Flex>
       {isDelete ? (
@@ -57,7 +64,13 @@ const TableDataActions = ({ id }: IProps) => {
           {!isDeleting && <Text>{countDownValue}</Text>}
         </Button>
       ) : (
-        <Button color="red" onClick={() => setIsDelete(true)}>
+        <Button
+          color="red"
+          onClick={() => {
+            console.log('going to delete ', id);
+            setIsDelete(true);
+          }}
+        >
           <IconTrash size={26} strokeWidth={1} />
         </Button>
       )}

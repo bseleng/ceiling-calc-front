@@ -10,9 +10,10 @@ import { Suspense } from 'react';
 type IProps = {
   rowCount: number;
   isLoading: boolean;
+  deleteDealer(dealerId: number): void;
 };
 
-const TableDealer = ({ rowCount, isLoading }: IProps) => {
+const TableDealer = ({ rowCount, isLoading, deleteDealer }: IProps) => {
   const [loadedRows, setLoadedRows] = useAtom(ATableDealerRows);
   const [sortDirection, setSortDirection] = useAtom(ATableDealerSortDirections);
   const skeletonRows = Array.from(Array(rowCount));
@@ -88,6 +89,8 @@ const TableDealer = ({ rowCount, isLoading }: IProps) => {
                   lastName={row.lastName}
                   telephone={row.telephone}
                   key={row.firstName + row.lastName + row.telephone}
+                 deleteDealer={deleteDealer}
+                  
                 />
               ))}
             </>

@@ -1,16 +1,21 @@
 import { ITableDealerRow } from '../../../interfaces';
 import TableDataActions from '../../_atoms/TableDataActions/TableDataActions';
 
-interface IProps extends ITableDealerRow {}
+interface IProps extends ITableDealerRow {
+  deleteDealer(dealerId: number): void;
+}
 
-const TableRow = ({ debts, firstName, lastName, telephone, id }: IProps) => {
+const TableRow = ({ debts, firstName, lastName, telephone, id, deleteDealer }: IProps) => {
   return (
     <tr>
       <td>{lastName + ' ' + firstName}</td>
       <td>{telephone}</td>
       <td>{debts}</td>
       <td>
-        <TableDataActions id={id} />
+        <TableDataActions id={id}
+        deleteDealer={deleteDealer}
+        
+        />
       </td>
     </tr>
   );
