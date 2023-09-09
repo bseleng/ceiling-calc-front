@@ -2,7 +2,7 @@ import { Welcome } from '../components/Welcome/Welcome';
 import { ColorSchemeToggle } from '../components/ColorSchemeToggle/ColorSchemeToggle';
 import { Button, Container, Flex, Grid, Group, Space, createStyles } from '@mantine/core';
 import { useAtom } from 'jotai';
-import { ABaseDevURL } from '../store/AtomsAPI';
+import { ABaseDevPort } from '../store/AtomsAPI';
 import { IChooseForms } from '../interfaces';
 import Link from 'next/link';
 
@@ -18,7 +18,7 @@ const useStyles = createStyles((theme) => ({
 
 export default function HomePage() {
   const { classes } = useStyles();
-  const [baseDevPort, setBaseDevPort] = useAtom(ABaseDevURL);
+  const [baseDevPort, setBaseDevPort] = useAtom(ABaseDevPort);
   const isPort5249 = baseDevPort === '5249';
   const isPort7021 = baseDevPort === '7021';
 

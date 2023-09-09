@@ -5,7 +5,7 @@ import TableDealer from '../components/_organisms/TableDealer/TableDealer';
 import { useAtom, useAtomValue } from 'jotai';
 import { ATableDealerRows } from '../store/AtomsTableDealer';
 import { Container, Flex, Pagination, Select, Space, ThemeIcon } from '@mantine/core';
-import { ABaseDevURL } from '../store/AtomsAPI';
+import { ABaseDevPort } from '../store/AtomsAPI';
 import { IconHome } from '@tabler/icons-react';
 import Link from 'next/link';
 
@@ -14,7 +14,7 @@ const dealersMock = [
   { name: 'yuri', company: 'cranky-crag', email: 'bsenelg@gmail.com' },
 ];
 const Dealers = () => {
-  const currentDevPort = useAtomValue(ABaseDevURL);
+  const currentDevPort = useAtomValue(ABaseDevPort);
 
   const [dealers, setDealers] = useAtom(ATableDealerRows);
 

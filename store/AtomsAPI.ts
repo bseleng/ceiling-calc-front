@@ -1,5 +1,5 @@
 import { atomWithStorage } from 'jotai/utils';
 
-import { IBaseDevURL as IBaseDevPort } from '../interfaces/APIInterfaces';
+import { IBaseDevPort as IBaseDevPort } from '../interfaces/APIInterfaces';
 
-export const ABaseDevURL = atomWithStorage<IBaseDevPort>('baseDevPort', undefined);
+export const ABaseDevPort = atomWithStorage<IBaseDevPort>('baseDevPort', undefined);

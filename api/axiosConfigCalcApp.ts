@@ -1,8 +1,20 @@
 import axios from 'axios';
-import { IBaseDevURL } from '../interfaces';
+import { IBaseDevPort } from '../interfaces';
 
-export const dealerApiInstance = (currentDevPort: IBaseDevURL) => {
-  const baseURL = `http://localhost:${currentDevPort}/api/DealerController/`;
+const getProtocol = (currentDevPort: IBaseDevPort) => {
+  switch (currentDevPort) {
+    case '5249':
+      return 'http';
+    case '7021':
+      return 'https';
+    default:
+      return undefined;
+  }
+};
+
+export const dealerApiInstance = (currentDevPort: IBaseDevPort) => {
+  const protocol = getProtocol(currentDevPort);
+  const baseURL = `${protocol}://localhost:${currentDevPort}/api/DealerController/`;
   return axios.create({
     baseURL,
   });
