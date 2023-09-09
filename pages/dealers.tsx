@@ -31,7 +31,7 @@ const Dealers = () => {
 
   //TODO: refactor curry???
   useEffect(() => {
-    if (currentDevPort !== undefined || dealers.length === 0) {
+    if (currentDevPort !== undefined || (currentDevPort !== undefined && dealers.length === 0)) {
       setIsLoading(true);
       const getDealers = dealerApiInstance(currentDevPort)('?' + getDealersParamsQuery);
 
