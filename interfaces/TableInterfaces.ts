@@ -1,4 +1,5 @@
 export type ITableDealerRow = {
+  id: number;
   firstName: string;
   lastName: string;
   telephone: number;
