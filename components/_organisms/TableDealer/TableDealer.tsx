@@ -56,6 +56,8 @@ const TableDealer = ({ rowCount, isLoading, deleteDealer }: IProps) => {
             >
               Задолженность
             </TableHeading>
+            <TableHeading> Город </TableHeading>
+
             <TableHeading> Действия </TableHeading>
           </tr>
         </thead>
@@ -74,6 +76,9 @@ const TableDealer = ({ rowCount, isLoading, deleteDealer }: IProps) => {
                     <Skeleton height={skeletonHeight} mb={skeletonMb} mt={skeletonMt} width={100} />
                   </td>
                   <td>
+                    <Skeleton height={skeletonHeight} mb={skeletonMb} mt={skeletonMt} width={130} />
+                  </td>
+                  <td>
                     <Skeleton height={skeletonHeight} mb={skeletonMb} mt={skeletonMt} width={100} />
                   </td>
                 </tr>
@@ -89,8 +94,8 @@ const TableDealer = ({ rowCount, isLoading, deleteDealer }: IProps) => {
                   lastName={row.lastName}
                   telephone={row.telephone}
                   key={row.firstName + row.lastName + row.telephone}
-                 deleteDealer={deleteDealer}
-                  
+                  deleteDealer={deleteDealer}
+                  city={row.city}
                 />
               ))}
             </>

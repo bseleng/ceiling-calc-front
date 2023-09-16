@@ -4,6 +4,7 @@ export type ITableDealerRow = {
   lastName: string;
   telephone: number;
   debts: number;
+  city: string;
 };
 
 export type ITableDealerRowValue = ITableDealerRow[keyof ITableDealerRow];
