@@ -3,7 +3,7 @@ import { ColorSchemeToggle } from '../components/ColorSchemeToggle/ColorSchemeTo
 import { Button, Container, Flex, Grid, Group, Space, createStyles } from '@mantine/core';
 import { useAtom } from 'jotai';
 import { ABaseDevPort } from '../store/AtomsAPI';
-import { IChooseForms } from '../interfaces';
+import { IBaseDevPort, IChooseForms, IProtocol } from '../interfaces';
 import Link from 'next/link';
 
 const useStyles = createStyles((theme) => ({
@@ -36,6 +36,13 @@ export default function HomePage() {
     return 'выбрать';
   };
 
+  const getProtocol = (baseDevPort: IBaseDevPort): IProtocol => {
+    if (baseDevPort === '5249') {
+      return 'http';
+    }
+    return 'https';
+  };
+
   return (
     <Container>
       <Welcome />
@@ -46,11 +53,20 @@ export default function HomePage() {
         <Grid.Col span={3}>
           <Group grow>
             <Flex direction="column" gap="md">
-              <Button variant={getButtonStyle(isPort5249)} onClick={() => setBaseDevPort('5249')}>
-                {getButtonVerb(isPort5249) + ' порт 5249'}
-              </Button>
               <Button variant={getButtonStyle(isPort7021)} onClick={() => setBaseDevPort('7021')}>
                 {getButtonVerb(isPort7021) + ' порт 7021'}
+              </Button>
+              <Button variant={getButtonStyle(isPort5249)} onClick={() => setBaseDevPort('5249')}>
+                {getButtonVerb(isPort7021) + ' порт 5249'}
+              </Button>
+              <Button
+                component="a"
+                target="_blank"
+                href={getProtocol(baseDevPort) + '://localhost:' + baseDevPort + '/swagger'}
+                color="blue"
+                variant={'filled'}
+              >
+                Swagger
               </Button>
             </Flex>
           </Group>
@@ -63,15 +79,6 @@ export default function HomePage() {
                   Дилеры
                 </Button>
               </Link>
-              <Button
-                component="a"
-                target="_blank"
-                href={'http://localhost:' + baseDevPort + '/swagger'}
-                color="teal"
-                variant={'filled'}
-              >
-                Swagger
-              </Button>
             </Flex>
           </Group>
         </Grid.Col>

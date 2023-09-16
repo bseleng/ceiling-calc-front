@@ -1,15 +1,11 @@
 import axios from 'axios';
-import { IBaseDevPort } from '../interfaces';
+import { IBaseDevPort, IProtocol } from '../interfaces';
 
-const getProtocol = (currentDevPort: IBaseDevPort) => {
-  switch (currentDevPort) {
-    case '5249':
-      return 'http';
-    case '7021':
-      return 'https';
-    default:
-      return undefined;
+const getProtocol = (currentDevPort: IBaseDevPort): IProtocol => {
+  if (currentDevPort === '5249') {
+    return 'http';
   }
+  return 'https';
 };
 
 export const dealerApiInstance = (currentDevPort: IBaseDevPort) => {
