@@ -75,12 +75,7 @@ const Dealers = () => {
   }, [totalPages]);
 
   const deleteDealer = async (dealerId: number) => {
-    const deleteDealerParams = {
-      id: dealerId.toString(),
-    };
-    const deleteDealersParamsQuery = new URLSearchParams(deleteDealerParams);
-
-    await dealerApiInstance(currentDevPort).delete('?' + deleteDealersParamsQuery);
+    await dealerApiInstance(currentDevPort).delete('/' + dealerId);
 
     const updatedDealers = dealers.filter((dealer) => dealer.id !== dealerId);
     setDealers([...updatedDealers]);

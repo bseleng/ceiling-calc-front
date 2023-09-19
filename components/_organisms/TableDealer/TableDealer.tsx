@@ -93,7 +93,7 @@ const TableDealer = ({ rowCount, isLoading, deleteDealer }: IProps) => {
                   firstName={row.firstName}
                   lastName={row.lastName}
                   telephone={row.telephone}
-                  key={row.firstName + row.lastName + row.telephone}
+                  key={row.id}
                   deleteDealer={deleteDealer}
                   city={row.city}
                 />
