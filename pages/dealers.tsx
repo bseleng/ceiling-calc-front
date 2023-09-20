@@ -40,14 +40,18 @@ const Dealers = () => {
     initialValues: {
       firstName: '',
       lastName: '',
-      telephone: 0,
+      telephone: '',
       debts: 0,
       city: '',
     },
 
     validate: {
-      telephone: (value) => (/^\d{11,11}$/.test(String(value)) ? null : 'Только цифры. 11 знаков'),
-      debts: (value) => (/\d+$/.test(String(value)) ? null : 'Только цифры.'),
+      telephone: (value) =>
+        /^[1-9]\d{10,10}$/.test(String(value)) ? null : 'Только цифры. 11 знаков. ',
+      debts: (value) => (/^-?\d{0,15}$/.test(String(value)) ? null : 'Только цифры.'),
+      city: (value) => (/^.{2,30}$/.test(value) ? null : 'От 2 до 30 знаков'),
+      firstName: (value) => (/^.{2,30}$/.test(value) ? null : 'От 2 до 30 знаков'),
+      lastName: (value) => (/^.{2,50}$/.test(value) ? null : 'От 1 до 30 знаков'),
     },
   });
 
