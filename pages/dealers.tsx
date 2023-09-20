@@ -12,6 +12,7 @@ import { IconUserPlus } from '@tabler/icons';
 import { useDisclosure } from '@mantine/hooks';
 import AddDealerModal from '../components/_organisms/TableDealer/AddDealerModal';
 import { useForm } from '@mantine/form';
+import { ITableDealerRow } from '../interfaces';
 
 const dealersMock = [
   { name: 'bogdan', company: 'cranky-crag', email: 'bsenelg@gmail.com' },
@@ -35,16 +36,17 @@ const Dealers = () => {
 
   const [opened, { open, close }] = useDisclosure(false);
 
+  const initialValues = {
+    firstName: '',
+    lastName: '',
+    telephone: '',
+    debts: 0,
+    city: '',
+  } as Omit<ITableDealerRow, 'id'>;
+
   const form = useForm({
     validateInputOnBlur: true,
-    initialValues: {
-      firstName: '',
-      lastName: '',
-      telephone: '',
-      debts: 0,
-      city: '',
-    },
-
+    initialValues,
     validate: {
       telephone: (value) =>
         /^[1-9]\d{10,10}$/.test(String(value)) ? null : 'Только цифры. 11 знаков. ',
