@@ -65,14 +65,15 @@ const AddDealerModal = ({ close, opened, form }: IProps) => {
             {...form.getInputProps('telephone')}
           />
           <Space h="md" />
-          <TextInput label="Задолженность" placeholder="0" {...form.getInputProps('debts')} />
-          <Space h="md" />
           <TextInput
             withAsterisk
             label="Город"
             placeholder="Москва"
             {...form.getInputProps('city')}
           />
+          <Space h="md" />
+          <TextInput label="Задолженность" placeholder="0" {...form.getInputProps('debts')} />
+
           <Space h="xl" />
 
           <Flex justify={'space-between'}>
@@ -82,11 +83,7 @@ const AddDealerModal = ({ close, opened, form }: IProps) => {
               <IconEraser size={26} strokeWidth={2} />
             </Button>
             <Space w="xl" />
-            <Button
-              type="submit"
-              loading={isAdding}
-              color={isAdding ? 'yellow' : 'blue'}
-            >
+            <Button type="submit" loading={isAdding} color={isAdding ? 'yellow' : 'blue'}>
               {isAdding ? 'Добавляем' : 'Добавить'}
             </Button>
           </Flex>
