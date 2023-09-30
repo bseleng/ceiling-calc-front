@@ -56,7 +56,13 @@ const TableDealer = ({ rowCount, isLoading, deleteDealer }: IProps) => {
             >
               Задолженность
             </TableHeading>
-            <TableHeading> Город </TableHeading>
+            <TableHeading
+              iconType={'sortText'}
+              onSort={() => sortColumn('city', 'text')}
+              sortDirection={sortDirection?.city || undefined}
+            >
+              Город
+            </TableHeading>
 
             <TableHeading> Действия </TableHeading>
           </tr>

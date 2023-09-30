@@ -10,7 +10,7 @@ export type ITableDealerRow = {
 export type ITableDealerRowValue = ITableDealerRow[keyof ITableDealerRow];
 
 export type ITableDealerHeading = keyof ITableDealerRow;
-export type ITableDealerHeadingSortable = Exclude<ITableDealerHeading, 'firstName' | 'telephone'>;
+export type ITableDealerHeadingSortable = Exclude<ITableDealerHeading, 'firstName' | 'telephone' | "id">;
 
 export interface ITableDealer {
   rows: ITableDealerRow[];
