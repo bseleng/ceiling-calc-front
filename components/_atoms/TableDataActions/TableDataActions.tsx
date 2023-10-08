@@ -67,7 +67,6 @@ const TableDataActions = ({ id, deleteDealer }: IProps) => {
         <Button
           color="red"
           onClick={() => {
-            console.log('going to delete ', id);
             setIsDelete(true);
           }}
         >

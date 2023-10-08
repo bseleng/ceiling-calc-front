@@ -7,9 +7,10 @@ interface IProps {
   onSort?: () => void;
   iconType?: ITableSortIcon;
   sortDirection?: ITableSortDirection;
+  isActive?: boolean;
 }
 
-const TableHeading = ({ children, onSort, iconType, sortDirection }: IProps) => {
+const TableHeading = ({ children, onSort, iconType, sortDirection, isActive }: IProps) => {
   const useStyles = createStyles((theme) => ({
     th: {
       padding: '0 !important',
@@ -24,6 +25,15 @@ const TableHeading = ({ children, onSort, iconType, sortDirection }: IProps) => 
       },
     },
 
+    active: {
+      backgroundColor: isActive ? theme.colors.blue : '',
+      borderRadius: isActive ? '5px' : '',
+
+      '&:hover': {
+        backgroundColor: theme.colors.blue[8],
+      },
+    },
+
     icon: {
       width: rem(21),
       height: rem(21),
@@ -35,7 +45,11 @@ const TableHeading = ({ children, onSort, iconType, sortDirection }: IProps) => 
 
   return (
     <th className={classes.th}>
-      <UnstyledButton onClick={onSort} className={classes.control}>
+      <UnstyledButton
+        onClick={onSort}
+        className={`${classes.control} ${isActive ? classes.active : ''}`}
+        aria-modal
+      >
         <Group position="apart">
           <Text fw={500} fz="sm">
             {children}

@@ -1,5 +1,5 @@
 import { atom } from 'jotai';
-import { ITableDealerRow, ITableDealerSorting } from '../interfaces';
+import { ITableDealerHeadingSortable, ITableDealerRow, ITableDealerSorting } from '../interfaces';
 
 export const ATableDealerRows = atom<ITableDealerRow[]>([]);
 
@@ -8,3 +8,5 @@ export const ATableDealerSortDirections = atom<ITableDealerSorting>({
   debts: 'none',
   city: 'none',
 });
+
+export const ATableDealerActiveSortColumn = atom<ITableDealerHeadingSortable | ''>('');

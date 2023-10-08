@@ -2,7 +2,11 @@ import { useEffect, useState } from 'react';
 import { TableSort } from '../components/TableWithSearch/Table';
 import TableDealer from '../components/_organisms/TableDealer/TableDealer';
 import { useAtom, useAtomValue } from 'jotai';
-import { ATableDealerRows } from '../store/AtomsTableDealer';
+import {
+  ATableDealerActiveSortColumn,
+  ATableDealerRows,
+  ATableDealerSortDirections,
+} from '../store/AtomsTableDealer';
 import { Button, Container, Flex, Pagination, Select, Space, ThemeIcon } from '@mantine/core';
 import { ABaseDevPort } from '../store/AtomsAPI';
 import { IconHome, IconUserPause } from '@tabler/icons-react';
@@ -27,10 +31,14 @@ const Dealers = () => {
   const [totalPages, setTotalPages] = useState(10);
   const [pageSize, setPageSize] = useState<string | null>('3');
   const [isLoading, setIsLoading] = useState(false);
+  const sortDirection = useAtomValue(ATableDealerSortDirections);
+  const activeSortColumn = useAtomValue(ATableDealerActiveSortColumn);
 
   const getDealersParams = {
     PageNumber: activePage.toString(),
     PageSize: (pageSize as string) || '1',
+    ...(activeSortColumn && { Property: activeSortColumn }),
+    ...(activeSortColumn && { Sort: sortDirection[activeSortColumn] }),
   };
   const getDealersParamsQuery = new URLSearchParams(getDealersParams);
 
@@ -72,7 +80,7 @@ const Dealers = () => {
           setIsLoading(false);
         });
     }
-  }, [currentDevPort, activePage, pageSize, dealers.length]);
+  }, [currentDevPort, activePage, pageSize, dealers.length, sortDirection]);
 
   useEffect(() => {
     if (activePage > totalPages) {

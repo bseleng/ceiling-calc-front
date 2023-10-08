@@ -1,7 +1,11 @@
 import { Skeleton, Table } from '@mantine/core';
 import TableRow from '../../_molecules/TableRow/TableRow';
 import TableHeading from '../../_atoms/TableHeading/TableHeading';
-import { ATableDealerRows, ATableDealerSortDirections } from '../../../store/AtomsTableDealer';
+import {
+  ATableDealerActiveSortColumn,
+  ATableDealerRows,
+  ATableDealerSortDirections,
+} from '../../../store/AtomsTableDealer';
 import { useAtom } from 'jotai';
 import { setTableDealerSort, sortNumericValues, sortTextValues } from './Logic';
 import { ITableDealerHeadingSortable } from '../../../interfaces';
@@ -16,6 +20,7 @@ type IProps = {
 const TableDealer = ({ rowCount, isLoading, deleteDealer }: IProps) => {
   const [loadedRows, setLoadedRows] = useAtom(ATableDealerRows);
   const [sortDirection, setSortDirection] = useAtom(ATableDealerSortDirections);
+  const [activeSortColumn, setActiveSortColumn] = useAtom(ATableDealerActiveSortColumn);
   const skeletonRows = Array.from(Array(rowCount));
   const skeletonHeight = 16;
   const skeletonMb = 10;
@@ -23,7 +28,7 @@ const TableDealer = ({ rowCount, isLoading, deleteDealer }: IProps) => {
 
   const sortColumn = (column: ITableDealerHeadingSortable, columnType: 'text' | 'numeric') => {
     setSortDirection(setTableDealerSort(sortDirection, column));
-
+    setActiveSortColumn(column);
     switch (columnType) {
       case 'text':
         setLoadedRows(sortTextValues(loadedRows, column, sortDirection[column]));
@@ -45,6 +50,7 @@ const TableDealer = ({ rowCount, isLoading, deleteDealer }: IProps) => {
               onSort={() => sortColumn('lastName', 'text')}
               iconType={'sortText'}
               sortDirection={sortDirection?.lastName || undefined}
+              isActive={activeSortColumn === 'lastName' && sortDirection?.lastName !== 'none'}
             >
               Фамилия Имя
             </TableHeading>
@@ -53,6 +59,7 @@ const TableDealer = ({ rowCount, isLoading, deleteDealer }: IProps) => {
               iconType={'sortNumber'}
               onSort={() => sortColumn('debts', 'numeric')}
               sortDirection={sortDirection?.debts || undefined}
+              isActive={activeSortColumn === 'debts' && sortDirection?.debts !== 'none'}
             >
               Задолженность
             </TableHeading>
@@ -60,6 +67,7 @@ const TableDealer = ({ rowCount, isLoading, deleteDealer }: IProps) => {
               iconType={'sortText'}
               onSort={() => sortColumn('city', 'text')}
               sortDirection={sortDirection?.city || undefined}
+              isActive={activeSortColumn === 'city' && sortDirection?.city !== 'none'}
             >
               Город
             </TableHeading>

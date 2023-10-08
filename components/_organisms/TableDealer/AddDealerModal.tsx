@@ -30,7 +30,6 @@ const AddDealerModal = ({ close, opened, form }: IProps) => {
               const addNewDealer = dealerApiInstance(currentDevPort).post('/', form.values);
               addNewDealer
                 .then((response) => {
-                  console.log(response);
                   if (response.statusText === 'OK') {
                     form.reset();
                     close();
@@ -41,7 +40,6 @@ const AddDealerModal = ({ close, opened, form }: IProps) => {
                 });
             }
 
-            console.log(form.validate());
           }}
         >
           <TextInput
