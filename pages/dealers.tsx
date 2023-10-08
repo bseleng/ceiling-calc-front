@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { TableSort } from '../components/TableWithSearch/Table';
 import TableDealer from '../components/_organisms/TableDealer/TableDealer';
 import { useAtom, useAtomValue } from 'jotai';
 import {
@@ -7,12 +6,21 @@ import {
   ATableDealerRows,
   ATableDealerSortDirections,
 } from '../store/AtomsTableDealer';
-import { Button, Container, Flex, Pagination, Select, Space, ThemeIcon } from '@mantine/core';
+import {
+  Button,
+  Container,
+  Flex,
+  Pagination,
+  Select,
+  Space,
+  TextInput,
+  ThemeIcon,
+} from '@mantine/core';
 import { ABaseDevPort } from '../store/AtomsAPI';
 import { IconHome, IconUserPause } from '@tabler/icons-react';
 import Link from 'next/link';
 import { dealerApiInstance } from '../api/axiosConfigCalcApp';
-import { IconUserPlus } from '@tabler/icons';
+import { IconSearch, IconUserPlus } from '@tabler/icons';
 import { useDisclosure } from '@mantine/hooks';
 import AddDealerModal from '../components/_organisms/TableDealer/AddDealerModal';
 import { useForm } from '@mantine/form';
@@ -27,6 +35,8 @@ const Dealers = () => {
 
   const [dealers, setDealers] = useAtom(ATableDealerRows);
 
+  const [searchStringInput, setSearchStringInput] = useState('');
+  const [searchStringQuery, setSearchStringQuery] = useState('');
   const [activePage, setActivePage] = useState(1);
   const [totalPages, setTotalPages] = useState(10);
   const [pageSize, setPageSize] = useState<string | null>('3');
@@ -39,6 +49,7 @@ const Dealers = () => {
     PageSize: (pageSize as string) || '1',
     ...(activeSortColumn && { Property: activeSortColumn }),
     ...(activeSortColumn && { Sort: sortDirection[activeSortColumn] }),
+    ...(searchStringQuery && { searchString: searchStringQuery }),
   };
   const getDealersParamsQuery = new URLSearchParams(getDealersParams);
 
@@ -65,42 +76,57 @@ const Dealers = () => {
     },
   });
 
+  const updateDealers = () => {
+    setIsLoading(true);
+    const getDealers = dealerApiInstance(currentDevPort)('?' + getDealersParamsQuery);
+
+    getDealers
+      .then((response) => {
+        setDealers(response.data.data);
+        setTotalPages(response.data.totalPages);
+
+        if (activePage > response.data.totalPages) {
+          setActivePage(response.data.totalPages);
+        }
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  };
+
+  useEffect(() => {
+    const timerId = setTimeout(() => {
+      if (searchStringQuery !== searchStringInput) {
+        setSearchStringQuery(searchStringInput);
+      }
+    }, 500);
+
+    return () => clearTimeout(timerId);
+  }, [searchStringInput]);
+
   //TODO: refactor curry???
   useEffect(() => {
-    if (currentDevPort !== undefined || (currentDevPort !== undefined && dealers.length === 0)) {
-      setIsLoading(true);
-      const getDealers = dealerApiInstance(currentDevPort)('?' + getDealersParamsQuery);
-
-      getDealers
-        .then((response) => {
-          setDealers(response.data.data);
-          setTotalPages(response.data.totalPages);
-        })
-        .finally(() => {
-          setIsLoading(false);
-        });
+    if (currentDevPort !== undefined) {
+      updateDealers();
     }
-  }, [currentDevPort, activePage, pageSize, dealers.length, sortDirection]);
+  }, [currentDevPort, activePage, pageSize, sortDirection, searchStringQuery]);
 
-  useEffect(() => {
-    if (activePage > totalPages) {
-      setActivePage(totalPages);
-    }
-  }, [totalPages]);
-
+  //TODO: when deleting last dealer from last page there is an extra DB call need to remove
   const deleteDealer = async (dealerId: number) => {
     await dealerApiInstance(currentDevPort).delete('/' + dealerId);
 
     const updatedDealers = dealers.filter((dealer) => dealer.id !== dealerId);
     setDealers([...updatedDealers]);
+
+    if (currentDevPort !== undefined && updatedDealers.length === 0) {
+      updateDealers();
+    }
   };
 
   return (
     <Container size={'xl'}>
-      <TableSort data={dealersMock} />
-      <br />
-      <br />
-      <br />
+      <Space h="xl" />
+
       <AddDealerModal close={close} opened={opened} form={form} />
       <Flex>
         <Link href={'/'}>
@@ -136,6 +162,17 @@ const Dealers = () => {
         />
       </Flex>
       <Space h="xl" />
+      <TextInput
+        placeholder="Поиск по  любому полю. Можно искать по частичным совпадениям слов: Алекс Мос"
+        mb="md"
+        icon={<IconSearch size="0.9rem" stroke={1.5} />}
+        value={searchStringInput}
+        onChange={(e) => {
+          if (searchStringInput !== e.target.value) {
+            setSearchStringInput(e.target.value);
+          }
+        }}
+      />
       <TableDealer
         rowCount={Number(pageSize as string) || 3}
         isLoading={isLoading}
