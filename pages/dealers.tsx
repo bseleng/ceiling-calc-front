@@ -26,10 +26,6 @@ import AddDealerModal from '../components/_organisms/TableDealer/AddDealerModal'
 import { useForm } from '@mantine/form';
 import { ITableDealerRow } from '../interfaces';
 
-const dealersMock = [
-  { name: 'bogdan', company: 'cranky-crag', email: 'bsenelg@gmail.com' },
-  { name: 'yuri', company: 'cranky-crag', email: 'bsenelg@gmail.com' },
-];
 const Dealers = () => {
   const currentDevPort = useAtomValue(ABaseDevPort);
 
@@ -45,10 +41,10 @@ const Dealers = () => {
   const activeSortColumn = useAtomValue(ATableDealerActiveSortColumn);
 
   const getDealersParams = {
-    PageNumber: activePage.toString(),
-    PageSize: (pageSize as string) || '1',
-    ...(activeSortColumn && { Property: activeSortColumn }),
-    ...(activeSortColumn && { Sort: sortDirection[activeSortColumn] }),
+    pageNumber: activePage.toString(),
+    pageSize: (pageSize as string) || '1',
+    ...(activeSortColumn && { property: activeSortColumn }),
+    ...(activeSortColumn && { sort: sortDirection[activeSortColumn] }),
     ...(searchStringQuery && { searchString: searchStringQuery }),
   };
   const getDealersParamsQuery = new URLSearchParams(getDealersParams);
@@ -163,7 +159,7 @@ const Dealers = () => {
       </Flex>
       <Space h="xl" />
       <TextInput
-        placeholder="Поиск по  любому полю. Можно искать по частичным совпадениям слов: Алекс Мос"
+        placeholder="Полноекстовый поиск. Можно искать по частичным совпадениям слов: Алекс Мос"
         mb="md"
         icon={<IconSearch size="0.9rem" stroke={1.5} />}
         value={searchStringInput}
