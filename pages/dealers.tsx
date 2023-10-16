@@ -17,7 +17,7 @@ import {
   ThemeIcon,
 } from '@mantine/core';
 import { ABaseDevPort } from '../store/AtomsAPI';
-import { IconHome, IconUserPause } from '@tabler/icons-react';
+import { IconHome, IconSquareX, IconUserPause } from '@tabler/icons-react';
 import Link from 'next/link';
 import { dealerApiInstance } from '../api/axiosConfigCalcApp';
 import { IconSearch, IconUserPlus } from '@tabler/icons';
@@ -35,7 +35,7 @@ const Dealers = () => {
   const [searchStringQuery, setSearchStringQuery] = useState('');
   const [activePage, setActivePage] = useState(1);
   const [totalPages, setTotalPages] = useState(10);
-  const [pageSize, setPageSize] = useState<string | null>('3');
+  const [pageSize, setPageSize] = useState<string | null>('5');
   const [isLoading, setIsLoading] = useState(false);
   const sortDirection = useAtomValue(ATableDealerSortDirections);
   const activeSortColumn = useAtomValue(ATableDealerActiveSortColumn);
@@ -81,7 +81,7 @@ const Dealers = () => {
         setDealers(response.data.data);
         setTotalPages(response.data.totalPages);
 
-        if (activePage > response.data.totalPages) {
+        if (activePage > response.data.totalPages && response.data.totalPages !== 0) {
           setActivePage(response.data.totalPages);
         }
       })
@@ -159,7 +159,7 @@ const Dealers = () => {
       </Flex>
       <Space h="xl" />
       <TextInput
-        placeholder="Полноекстовый поиск. Можно искать по частичным совпадениям слов: Алекс Мос"
+        placeholder="Полноекстовый поиск. Можно искать по частичным совпадениям слов: Алекс Мос. Для поиска введите запрос от 2 символов"
         mb="md"
         icon={<IconSearch size="0.9rem" stroke={1.5} />}
         value={searchStringInput}
@@ -168,6 +168,14 @@ const Dealers = () => {
             setSearchStringInput(e.target.value);
           }
         }}
+        rightSection={
+          searchStringInput && (
+            <Button variant="subtle" color="red" onClick={() => setSearchStringInput('')}>
+              <IconSquareX />
+            </Button>
+          )
+        }
+        rightSectionWidth={63}
       />
       <TableDealer
         rowCount={Number(pageSize as string) || 3}
