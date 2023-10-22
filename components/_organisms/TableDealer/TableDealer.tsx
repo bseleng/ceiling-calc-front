@@ -16,6 +16,7 @@ type IProps = {
   isLoading: boolean;
   deleteDealer(dealerId: number): void;
   updateDealer(updateFields: ITableUpdateDealerField[]): void;
+
 };
 
 const TableDealer = ({ rowCount, isLoading, deleteDealer, updateDealer }: IProps) => {

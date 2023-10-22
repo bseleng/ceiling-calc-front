@@ -127,16 +127,27 @@ const Dealers = () => {
         value: updateField.value,
       };
     });
-    await dealerApiInstance(currentDevPort)
+    const patchDealerRes = await dealerApiInstance(currentDevPort)
       .patch('/PatchJson?id=' + updateFields[0].dealerId, updateFieldsReq, {
         headers: {
-          'Content-Type': 'application/json-patch+json'
-
-        }
+          'Content-Type': 'application/json-patch+json',
+        },
       })
       .then((response) => {
-        console.log(response);
+        return response.data;
+      })
+      .catch((e) => {
+        console.error(e);
       });
+
+    if (patchDealerRes && patchDealerRes.id) {
+      const updatedDealers = [...dealers];
+      const dealerToUpdateindex = updatedDealers.findIndex(
+        (dealer) => dealer.id === patchDealerRes.id
+      );
+      updatedDealers[dealerToUpdateindex] = patchDealerRes;
+      setDealers(updatedDealers);
+    }
   };
 
   return (
