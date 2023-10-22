@@ -24,7 +24,7 @@ import { IconSearch, IconUserPlus } from '@tabler/icons';
 import { useDisclosure } from '@mantine/hooks';
 import AddDealerModal from '../components/_organisms/TableDealer/AddDealerModal';
 import { useForm } from '@mantine/form';
-import { ITableDealerRow } from '../interfaces';
+import { ITableDealerRow, ITableUpdateDealerField } from '../interfaces';
 
 const Dealers = () => {
   const currentDevPort = useAtomValue(ABaseDevPort);
@@ -119,6 +119,26 @@ const Dealers = () => {
     }
   };
 
+  const updateDealer = async (updateFields: ITableUpdateDealerField[]) => {
+    const updateFieldsReq = updateFields.map((updateField) => {
+      return {
+        op: 'add',
+        path: updateField.path,
+        value: updateField.value,
+      };
+    });
+    await dealerApiInstance(currentDevPort)
+      .patch('/PatchJson?id=' + updateFields[0].dealerId, updateFieldsReq, {
+        headers: {
+          'Content-Type': 'application/json-patch+json'
+
+        }
+      })
+      .then((response) => {
+        console.log(response);
+      });
+  };
+
   return (
     <Container size={'xl'}>
       <Space h="xl" />
@@ -181,6 +201,7 @@ const Dealers = () => {
         rowCount={Number(pageSize as string) || 3}
         isLoading={isLoading}
         deleteDealer={deleteDealer}
+        updateDealer={updateDealer}
       />
       <Space h="xl" />
       <Pagination value={activePage} onChange={setActivePage} total={totalPages} />

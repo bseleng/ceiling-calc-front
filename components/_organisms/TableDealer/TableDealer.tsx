@@ -8,16 +8,17 @@ import {
 } from '../../../store/AtomsTableDealer';
 import { useAtom } from 'jotai';
 import { setTableDealerSort, sortNumericValues, sortTextValues } from './Logic';
-import { ITableDealerHeadingSortable } from '../../../interfaces';
+import { ITableDealerHeadingSortable, ITableUpdateDealerField } from '../../../interfaces';
 import { Suspense } from 'react';
 
 type IProps = {
   rowCount: number;
   isLoading: boolean;
   deleteDealer(dealerId: number): void;
+  updateDealer(updateFields: ITableUpdateDealerField[]): void;
 };
 
-const TableDealer = ({ rowCount, isLoading, deleteDealer }: IProps) => {
+const TableDealer = ({ rowCount, isLoading, deleteDealer, updateDealer }: IProps) => {
   const [loadedRows, setLoadedRows] = useAtom(ATableDealerRows);
   const [sortDirection, setSortDirection] = useAtom(ATableDealerSortDirections);
   const [activeSortColumn, setActiveSortColumn] = useAtom(ATableDealerActiveSortColumn);
@@ -109,6 +110,7 @@ const TableDealer = ({ rowCount, isLoading, deleteDealer }: IProps) => {
                   telephone={row.telephone}
                   key={row.id}
                   deleteDealer={deleteDealer}
+                  updateDealer={updateDealer}
                   city={row.city}
                 />
               ))}
